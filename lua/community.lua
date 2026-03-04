@@ -25,4 +25,18 @@ return {
 
   -- JSON (config files, package.json, etc.)
   { import = "astrocommunity.pack.json" },
+
+  -- Docker
+  { import = "astrocommunity.docker.lazydocker" },
+  { import = "astrocommunity.pack.docker" },
+
+  -- Go
+  { import = "astrocommunity.pack.go" },
+  { import = "astrocommunity.pack.golangci-lint" },
+
+  -- Just
+  { import = "astrocommunity.pack.just" },
+
+  -- Kubernetes
+  { import = "astrocommunity.pack.helm" },
 }
