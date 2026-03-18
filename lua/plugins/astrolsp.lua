@@ -23,6 +23,11 @@ return {
           "go",
           "templ",
           "lua",
+          "html",
+          "javascript",
+          "typescript",
+          "css",
+          "scss",
         },
         ignore_filetypes = {
           -- "python",

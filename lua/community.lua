@@ -15,6 +15,7 @@ return {
   { import = "astrocommunity.pack.templ" },
 
   -- HTML, CSS, Emmet
+  { import = "astrocommunity.pack.prettier" },
   { import = "astrocommunity.pack.html-css" },
 
   -- JavaScript / TypeScript (vtsls, neotest-jest)
