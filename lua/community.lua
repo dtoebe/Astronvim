@@ -8,11 +8,6 @@ return {
   { import = "astrocommunity.colorscheme.dracula-nvim" },
 
   { import = "astrocommunity.pack.lua" },
-  -- import/override with your plugins folder
-  { import = "astrocommunity.pack.golangci-lint" },
-
-  -- Templ (Go HTML templating engine)
-  { import = "astrocommunity.pack.templ" },
 
   -- HTML, CSS, Emmet
   { import = "astrocommunity.pack.prettier" },
@@ -24,8 +19,11 @@ return {
   -- Tailwind CSS (useful with Templ + HTMX/Datastar stacks)
   { import = "astrocommunity.pack.tailwindcss" },
 
-  -- JSON (config files, package.json, etc.)
+  -- Config (config files, package.json, etc.)
   { import = "astrocommunity.pack.json" },
+  { import = "astrocommunity.pack.toml" },
+  { import = "astrocommunity.pack.yaml" },
+  { import = "astrocommunity.pack.xml" },
 
   -- Docker
   { import = "astrocommunity.docker.lazydocker" },
@@ -34,10 +32,14 @@ return {
   -- Go
   { import = "astrocommunity.pack.go" },
   { import = "astrocommunity.pack.golangci-lint" },
+  { import = "astrocommunity.pack.templ" },
 
   -- Just
   { import = "astrocommunity.pack.just" },
 
   -- Kubernetes
   { import = "astrocommunity.pack.helm" },
+
+  -- SQL
+  { import = "astrocommunity.pack.sql" },
 }
