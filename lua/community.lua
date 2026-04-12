@@ -42,4 +42,7 @@ return {
 
   -- SQL
   { import = "astrocommunity.pack.sql" },
+
+  -- Obsidian
+  { import = "astrocommunity.note-taking.obsidian-nvim" },
 }
