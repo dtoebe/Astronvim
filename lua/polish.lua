@@ -17,7 +17,7 @@ return function()
   -- 4. Inlay hint highlight
   vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#949494", italic = true })
 
-  -- wordwrap
+  -- Wordwrap
   vim.opt.wrap = true
   vim.opt.linebreak = true
   vim.opt.breakindent = true
@@ -49,12 +49,9 @@ return function()
   -- Hugo filetype detection
   vim.filetype.add {
     extension = {
-      -- Treat .hugo files specifically if you use that extension
       hugo = "hugo",
     },
     pattern = {
-      -- If you are inside a Hugo project, treat HTML as Go Templates
-      -- This regex looks for "layouts" or "archetypes" in the path
       [".*/layouts/.*%.html"] = "gotmpl",
       [".*/archetypes/.*%.html"] = "gotmpl",
     },
@@ -81,10 +78,8 @@ return function()
     local test_file
 
     if file:match "_test%.go$" then
-      -- We're in a test file, open the implementation file
       test_file = file:gsub("_test%.go$", ".go")
     else
-      -- We're in an implementation file, open the test file
       test_file = file:gsub("%.go$", "_test.go")
     end
 
@@ -99,4 +94,53 @@ return function()
       end)
     end
   end, { desc = "Toggle Go test/impl file in vsplit" })
+
+  -- 8. Jupyter / Molten setup
+  -- Activate Otter LSP (Pyright) inside .ipynb notebook cells
+  vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+    pattern = "*.ipynb",
+    callback = function()
+      local ok, otter = pcall(require, "otter")
+      if ok then otter.activate({ "python" }, true, true, nil) end
+    end,
+  })
+
+  -- MoltenEvaluateOperator must use expr = true
+  vim.keymap.set("n", "<leader>me", "v:lua.require'molten.utils'.operatorfunc(v:false)", {
+    desc = "Molten evaluate operator",
+    silent = true,
+    expr = true,
+    callback = function() vim.o.operatorfunc = "v:lua.require'molten.utils'.operatorfunc" end,
+  })
+
+  -- Python/notebook keymaps (scoped to python buffers)
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "python",
+    callback = function()
+      local opts = { buffer = true, silent = true }
+
+      -- Evaluate current cell (inner paragraph = between # %% markers)
+      vim.keymap.set("n", "<leader>mr", function()
+        vim.cmd "MoltenEvaluateOperator"
+        vim.api.nvim_feedkeys("ip", "n", false)
+      end, vim.tbl_extend("force", opts, { desc = "Molten run cell" }))
+
+      -- Navigate cells
+      vim.keymap.set(
+        "n",
+        "]j",
+        [[/^\s*#\s*%%<CR>:nohlsearch<CR>]],
+        vim.tbl_extend("force", opts, { desc = "Next cell" })
+      )
+      vim.keymap.set(
+        "n",
+        "[j",
+        [[?^\s*#\s*%%<CR>:nohlsearch<CR>]],
+        vim.tbl_extend("force", opts, { desc = "Prev cell" })
+      )
+
+      -- Insert new cell below cursor
+      vim.keymap.set("n", "<leader>mc", "o# %%<CR>", vim.tbl_extend("force", opts, { desc = "New cell below" }))
+    end,
+  })
 end

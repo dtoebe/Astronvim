@@ -9,6 +9,9 @@ return {
       "gosum",
       "gowork",
 
+      -- Python
+      "python",
+
       -- Templ
       "templ",
       "gotmpl",

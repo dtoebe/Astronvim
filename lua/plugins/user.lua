@@ -36,18 +36,18 @@ return {
       local luasnip = require "luasnip"
       luasnip.filetype_extend("javascript", { "javascriptreact" })
       luasnip.filetype_extend("typescript", { "typescriptreact" })
-      luasnip.filetype_extend("templ", { "html" }) -- get html snippets in templ files
+      luasnip.filetype_extend("templ", { "html" })
       require "astronvim.plugins.configs.luasnip"(plugin, opts)
     end,
   },
 
-  -- Friendly snippets: includes Go, HTML, JS/TS, CSS out of the box
+  -- Friendly snippets
   {
     "rafamadriz/friendly-snippets",
     config = function() require("luasnip.loaders.from_vscode").lazy_load() end,
   },
 
-  -- Autopairs: Treesitter-aware, keep your custom rules
+  -- Autopairs
   {
     "windwp/nvim-autopairs",
     config = function(plugin, opts)
@@ -66,7 +66,7 @@ return {
     end,
   },
 
-  -- Go test coverage gutter highlights
+  -- Go test coverage
   {
     "andythigpen/nvim-coverage",
     dependencies = { "nvim-lua/plenary.nvim" },
@@ -76,7 +76,6 @@ return {
       load_coverage_cb = function(ftype) vim.notify("Coverage loaded for " .. ftype, vim.log.levels.INFO) end,
       lang = {
         go = {
-          -- generate with: go test -coverprofile=coverage.out ./...
           coverage_file = vim.fn.getcwd() .. "/coverage.out",
         },
       },
@@ -110,7 +109,7 @@ return {
     },
   },
 
-  -- Color preview for CSS / Tailwind classes
+  -- Color preview
   {
     "NvChad/nvim-colorizer.lua",
     event = "BufReadPre",
@@ -123,29 +122,24 @@ return {
     },
   },
 
-  -- Render Markdown as rich text in the buffer
+  -- Render Markdown
   {
     "MeanderingProgrammer/render-markdown.nvim",
-    ft = { "markdown", "rmd" }, -- lazy-load on markdown files
+    ft = { "markdown", "rmd" },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
-      -- "echasnovski/mini.icons",
       "nvim-tree/nvim-web-devicons",
     },
     opts = {
-      -- use treesitter to parse markdown
       parser = "markdown",
-      -- you can tweak these as you like, this is a safe minimal setup
-      render_modes = { "n", "i" }, -- render in normal + insert modes
+      render_modes = { "n", "i" },
       heading = {
         enabled = true,
-        -- example: style headings with different prefixes
         sign = true,
         icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " },
       },
       code = {
         enabled = true,
-        -- highlight fenced code blocks with treesitter
         sign = true,
       },
       bullet = {
@@ -153,6 +147,7 @@ return {
       },
     },
   },
+
   -- Dadbod
   {
     "kristijanhusak/vim-dadbod-ui",
@@ -167,5 +162,110 @@ return {
       "DBUIFindBuffer",
     },
     init = function() vim.g.db_ui_use_nerd_fonts = 1 end,
+  },
+
+  -- Jupytext
+  {
+    "GCBallesteros/jupytext.nvim",
+    opts = {
+      style = "percent",
+      output_extension = "py",
+      force_ft = "python",
+    },
+    config = true,
+  },
+
+  -- Molten
+  {
+    "benlubas/molten-nvim",
+    version = "^1.0.0",
+    build = ":UpdateRemotePlugins",
+    dependencies = { "3rd/image.nvim" },
+    init = function()
+      vim.g.molten_use_border_highlights = true
+      vim.g.molten_virt_text_output = true
+      vim.g.molten_virt_lines_off_by_1 = true
+      vim.g.molten_auto_open_output = false
+    end,
+  },
+
+  -- Image rendering
+  {
+    "3rd/image.nvim",
+    opts = {
+      backend = "kitty",
+      editor_only_render_when_focused = true,
+      tmux_show_only_in_active_window = true,
+      integrations = {
+        markdown = { enabled = true },
+        neorg = { enabled = false },
+      },
+      max_width = 1000,
+      max_height = 250,
+      max_height_window_percentage = math.huge,
+      max_width_window_percentage = math.huge,
+      window_overlap_clear_enabled = true,
+      window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
+    },
+  },
+
+  -- Quarto
+  {
+    "quarto-dev/quarto-nvim",
+    dependencies = {
+      "jmbuhr/otter.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts = {
+      lspFeatures = {
+        languages = { "python", "r", "julia" },
+        chunks = "all",
+        diagnostics = { enabled = true, triggers = { "BufWritePost" } },
+        completion = { enabled = true },
+      },
+    },
+  },
+
+  -- Otter
+  { "jmbuhr/otter.nvim", opts = {} },
+
+  -- Mason LSP install
+  {
+    "williamboman/mason-lspconfig.nvim",
+    opts = {
+      ensure_installed = { "pyright" },
+    },
+  },
+
+  -- AstroLSP
+  {
+    "AstroNvim/astrolsp",
+    ---@type AstroLSPOpts
+    opts = {
+      servers = { "pyright" },
+    },
+  },
+
+  -- Aerial fix for Neovim 0.12
+  {
+    "stevearc/aerial.nvim",
+    opts = function(_, opts) opts.backends = { "lsp", "markdown", "man", "asciidoc" } end,
+  },
+  {
+    "Saghen/blink.cmp",
+    opts = {
+      appearance = {
+        use_nvim_cmp_as_default = false,
+      },
+      completion = {
+        keyword = {
+          -- Don't use treesitter for keyword range detection
+          range = "prefix",
+        },
+        documentation = {
+          treesitter_highlighting = false,
+        },
+      },
+    },
   },
 }

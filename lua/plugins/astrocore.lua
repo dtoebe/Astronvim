@@ -48,6 +48,14 @@ return {
         -- configure global vim variables (vim.g)
         -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
         -- This can be found in the `lua/lazy_setup.lua` file
+
+        -- Molten global settings
+        molten_image_provider = "image.nvim",
+        molten_output_win_max_height = 20,
+        molten_auto_open_output = true,
+        molten_wrap_output = true,
+        molten_virt_text_output = true,
+        molten_virt_lines_off_by_1 = true,
       },
     },
     -- Mappings can be configured through AstroCore as well.
@@ -80,7 +88,34 @@ return {
         -- ["<Leader>b"] = { desc = "Buffers" },
 
         -- setting a mapping to false will disable it
-        -- ["<C-S>"] = false,
+        -- ["<​C-S>"] = false,
+
+        -- Molten / Jupyter keymaps
+        ["<Leader>m"] = { desc = "Molten/Jupyter" },
+        ["<Leader>mi"] = { "<cmd>MoltenInit<cr>", desc = "Init kernel" },
+        ["<Leader>me"] = {
+          function()
+            vim.cmd "MoltenEvaluateOperator"
+            vim.api.nvim_feedkeys("ip", "n", false)
+          end,
+          desc = "Evaluate (operator)",
+        },
+        ["<Leader>ml"] = { "<cmd>MoltenEvaluateLine<cr>", desc = "Evaluate line" },
+        ["<Leader>mr"] = { "<cmd>MoltenReevaluateCell<cr>", desc = "Re-evaluate cell" },
+        ["<Leader>md"] = { "<cmd>MoltenDelete<cr>", desc = "Delete cell" },
+        ["<Leader>mo"] = { "<cmd>MoltenShowOutput<cr>", desc = "Show output" },
+        ["<Leader>mh"] = { "<cmd>MoltenHideOutput<cr>", desc = "Hide output" },
+        ["<Leader>ms"] = { "<cmd>MoltenEnterOutput<cr>", desc = "Enter output window" },
+        ["<Leader>mk"] = { "<cmd>MoltenInterrupt<cr>", desc = "Interrupt kernel" },
+        ["<Leader>mR"] = { "<cmd>MoltenRestart!<cr>", desc = "Restart kernel" },
+        ["<Leader>mx"] = { "<cmd>MoltenOpenInBrowser<cr>", desc = "Open in browser" },
+      },
+      -- Visual mode molten mappings
+      v = {
+        ["<Leader>mv"] = {
+          ":<C-u>MoltenEvaluateVisual<cr>",
+          desc = "Evaluate visual selection",
+        },
       },
     },
   },
